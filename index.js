@@ -1,50 +1,19 @@
 var express = require('express');
-var app = express();
 var cors = require('cors');
+var bodyParser = require('body-parser');
 
+var foodRoute = require('./routes/food');
+var unitRoute = require('./routes/unit');
+var categoryRoute = require('./routes/category');
 
+var app = express();
 app.use(cors());
+app.use(bodyParser.urlencoded({extended:false}));
 
-var frozenFoods = [{
-  id: 1,
-  name: 'bacon',
-  quantity: 3,
-  unit_id: 6,
-  category_id: 6
-},
-{
-  id: 2,
-  name: 'low carb bread',
-  quantity: 2,
-  unit_id: 8,
-  category_id: 5,
-},
-{
-  id: 3,
-  name: 'butter',
-  quantity: 4,
-  unit_id: 6,
-  category_id: 1
-}];
+app.use('/food', foodRoute);
+app.use('/unit', unitRoute);
+app.use('/category', categoryRoute);
 
-app.get('/frozenFoods', function(req, res){
-  res.send({frozenFoods: frozenFoods});
-});
-
-app.get('/frozenFoods/:id', function(req, res){
-  res.json(getFrozenFood(frozenFoods, req.params.id));
-});
-
-
-function getFrozenFood(array, id){
-  for(var i = 0; i < array.length; i++){
-    if(array[i].id == id){
-      return array[i];
-    }
-  }
-  return 'food not found';
-}
-
-app.listen(8000, function(){
-    console.log('Listening on port 8000');
+app.listen(8000, function() {
+  console.log('Listening on port 8000');
 });
