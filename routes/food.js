@@ -2,10 +2,11 @@ var express = require('express');
 // var app = express();
 var router = express.Router();
 
+
 var knex = require('./connection');
 
 router.get('/', function(req, res) {
-  knex('food').select().then(function(food){
+  knex('food').select().orderBy('id').then(function(food){
     res.send({
       food: food
     });
@@ -34,6 +35,11 @@ router.post('/', function(req, res){
 
 
 router.put('/:id', function(req, res){
+  console.log(req.body);
+
+
+  console.log("id = ["  + req.params.id +  "]\n" +
+      " name=[" + req.body.name + "]");
   knex('food').where('id', req.params.id)
   .update({
     name: req.body.name,
@@ -41,8 +47,10 @@ router.put('/:id', function(req, res){
     unit_id: req.body.unit_id,
     category_id: req.body.category_id
   }).then(function(result){
+    console.log(result);
     res.json(result);
   });
+
 });
 
 router.delete('/:id', function(req, res){
